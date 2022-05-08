@@ -109,8 +109,6 @@ export class Account extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
-
-    this.set("bool", Value.fromBoolean(false));
   }
 
   save(): void {
@@ -137,15 +135,6 @@ export class Account extends Entity {
 
   set id(value: string) {
     this.set("id", Value.fromString(value));
-  }
-
-  get bool(): boolean {
-    let value = this.get("bool");
-    return value!.toBoolean();
-  }
-
-  set bool(value: boolean) {
-    this.set("bool", Value.fromBoolean(value));
   }
 }
 

@@ -10,7 +10,6 @@ type Event @entity {
 
 type Account @entity {
   id: ID!
-  bool: Boolean!
 }
 
 type RSVP @entity {
