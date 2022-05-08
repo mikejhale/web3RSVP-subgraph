@@ -1,53 +1,32 @@
-specVersion: 0.0.1
+specVersion: 0.0.2
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum
-    name: LooksRareExchange
+    name: Web3RSVP
     network: mainnet
     source:
-      address: "0x59728544b08ab483533076417fbbb2fd0b17ce3a"
-      abi: LooksRareExchange
+      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+      abi: Web3RSVP
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - CancelAllOrders
-        - CancelMultipleOrders
-        - NewCurrencyManager
-        - NewExecutionManager
-        - NewProtocolFeeRecipient
-        - NewRoyaltyFeeManager
-        - NewTransferSelectorNFT
-        - OwnershipTransferred
-        - RoyaltyPayment
-        - TakerAsk
-        - TakerBid
+        - Account
+        - Event
+        - Confirmation
+        - RSVP
       abis:
-        - name: LooksRareExchange
-          file: ./abis/LooksRareExchange.json
+        - name: Web3RSVP
+          file: ./abis/Web3RSVP.json
       eventHandlers:
-        - event: CancelAllOrders(indexed address,uint256)
-          handler: handleCancelAllOrders
-        - event: CancelMultipleOrders(indexed address,uint256[])
-          handler: handleCancelMultipleOrders
-        - event: NewCurrencyManager(indexed address)
-          handler: handleNewCurrencyManager
-        - event: NewExecutionManager(indexed address)
-          handler: handleNewExecutionManager
-        - event: NewProtocolFeeRecipient(indexed address)
-          handler: handleNewProtocolFeeRecipient
-        - event: NewRoyaltyFeeManager(indexed address)
-          handler: handleNewRoyaltyFeeManager
-        - event: NewTransferSelectorNFT(indexed address)
-          handler: handleNewTransferSelectorNFT
-        - event: OwnershipTransferred(indexed address,indexed address)
-          handler: handleOwnershipTransferred
-        - event: RoyaltyPayment(indexed address,indexed uint256,indexed address,address,uint256)
-          handler: handleRoyaltyPayment
-        - event: TakerAsk(bytes32,uint256,indexed address,indexed address,indexed address,address,address,uint256,uint256,uint256)
-          handler: handleTakerAsk
-        - event: TakerBid(bytes32,uint256,indexed address,indexed address,indexed address,address,address,uint256,uint256,uint256)
-          handler: handleTakerBid
+        - event: NewEventCreated(bytes32,address,uint256,uint256,uint256)
+          handler: handleNewEventCreated
+        - event: NewRSVP(bytes32,address)
+          handler: handleNewRSVP
+        - event: ConfirmedAttendee(bytes32,address)
+          handler: handleConfirmedAttendee
+        - event: DepositsPaidOut(bytes32)
+          handler: handleDepositsPaidOut
       file: ./src/mapping.ts

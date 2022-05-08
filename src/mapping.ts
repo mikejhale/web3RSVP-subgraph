@@ -1,91 +1,98 @@
-import { BigInt } from "@graphprotocol/graph-ts"
+import { BigInt, Address, Bytes } from "@graphprotocol/graph-ts"
 import {
-  LooksRareExchange,
-  CancelAllOrders,
-  CancelMultipleOrders,
-  NewCurrencyManager,
-  NewExecutionManager,
-  NewProtocolFeeRecipient,
-  NewRoyaltyFeeManager,
-  NewTransferSelectorNFT,
-  OwnershipTransferred,
-  RoyaltyPayment,
-  TakerAsk,
-  TakerBid
-} from "../generated/LooksRareExchange/LooksRareExchange"
-import { ExampleEntity } from "../generated/schema"
+  ConfirmedAttendee,
+  NewEventCreated,
+  NewRSVP
+} from "../generated/Web3RSVP/Web3RSVP"
+import { Account, RSVP, Confirmation, Event } from "../generated/schema"
 
-export function handleCancelAllOrders(event: CancelAllOrders): void {
-  // Entities can be loaded from the store using a string ID; this ID
-  // needs to be unique across all entities of the same type
-  let entity = ExampleEntity.load(event.transaction.from.toHex())
-
-  // Entities only exist after they have been saved to the store;
-  // `null` checks allow to create entities on demand
-  if (!entity) {
-    entity = new ExampleEntity(event.transaction.from.toHex())
-
-    // Entity fields can be set using simple assignments
-    entity.count = BigInt.fromI32(0)
+export function handleNewEventCreated(event: NewEventCreated): void {
+  let newEvent = Event.load(event.params.eventID.toHex());
+  if (newEvent == null) {
+    newEvent = new Event(event.params.eventID.toHex());
+    newEvent.eventOwner = event.params.creatorAddress.toString();
+    newEvent.eventTimestamp = event.params.eventTimestamp
+    newEvent.maxCapacity = event.params.maxCapacity;
+    newEvent.deposit = event.params.deposit;
+    newEvent.paidOut = false;
+    newEvent.save();
   }
-
-  // BigInt and BigDecimal math are supported
-  entity.count = entity.count + BigInt.fromI32(1)
-
-  // Entity fields can be set based on event parameters
-  entity.user = event.params.user
-  entity.newMinNonce = event.params.newMinNonce
-
-  // Entities can be written to the store with `.save()`
-  entity.save()
-
-  // Note: If a handler doesn't require existing field values, it is faster
-  // _not_ to load the entity from the store. Instead, create it fresh with
-  // `new Entity(...)`, set the fields that should be updated and save the
-  // entity back to the store. Fields that were not set or unset remain
-  // unchanged, allowing for partial updates to be applied.
-
-  // It is also possible to access smart contracts from mappings. For
-  // example, the contract that has emitted the event can be connected to
-  // with:
-  //
-  // let contract = Contract.bind(event.address)
-  //
-  // The following functions can then be called on this contract to access
-  // state variables and other data:
-  //
-  // - contract.DOMAIN_SEPARATOR(...)
-  // - contract.WETH(...)
-  // - contract.currencyManager(...)
-  // - contract.executionManager(...)
-  // - contract.isUserOrderNonceExecutedOrCancelled(...)
-  // - contract.owner(...)
-  // - contract.protocolFeeRecipient(...)
-  // - contract.royaltyFeeManager(...)
-  // - contract.transferSelectorNFT(...)
-  // - contract.userMinOrderNonce(...)
 }
 
-export function handleCancelMultipleOrders(event: CancelMultipleOrders): void {}
+function getOrCreateAccount(address: Address): Account {
+  let account = Account.load(address.toHex());
+  if (account == null){
+    account = new Account(address.toHex());
+  }
+  return account;
+}
 
-export function handleNewCurrencyManager(event: NewCurrencyManager): void {}
+export function handleNewRSVP(event: NewRSVP): void {
+  let newRSVP = RSVP.load(event.transaction.from.toHex());
+  let account = getOrCreateAccount(event.params.attendeeAddress);
+  let thisEvent = Event.load(event.params.eventID.toHex());
+  if (newRSVP == null && thisEvent != null){
+    newRSVP = new RSVP(event.transaction.from.toHex());
+    newRSVP.attendee = account.id;
+    newRSVP.event = thisEvent.id;
+    newRSVP.save()
+  }
+}
 
-export function handleNewExecutionManager(event: NewExecutionManager): void {}
+export function handleConfirmedAttendee(event: ConfirmedAttendee): void {
+  let newConfirmation = Confirmation.load(event.transaction.from.toHex());
+  let account = getOrCreateAccount(event.params.attendeeAddress);
+  let thisEvent = Event.load(event.params.eventID.toHex());
+  if (newConfirmation == null && thisEvent != null){
+    newConfirmation = new Confirmation(event.transaction.from.toHex());
+    newConfirmation.attendee = account.id;
+    newConfirmation.event = thisEvent.id;
+    newConfirmation.save()
+  }
+}
 
-export function handleNewProtocolFeeRecipient(
-  event: NewProtocolFeeRecipient
-): void {}
+// export function handleNewEventCreated(event: NewEventCreated): void {
+//   // let newEvent = Event.load(event.transaction.from.toHex());
+//   let newEvent = Event.load(event.params.eventID.toHex());
+//   if (newEvent == null) {
+//     newEvent = new Event(event.params.eventID.toHex());
+//     newEvent.eventOwner = event.params.creatorAddress.toString();
+//     newEvent.eventTimestamp = event.params.eventTimestamp
+//     newEvent.maxCapacity = event.params.maxCapacity;
+//     newEvent.deposit = event.params.deposit;
+//     newEvent.paidOut = false;
+//     newEvent.save();
+//   }
+// }
 
-export function handleNewRoyaltyFeeManager(event: NewRoyaltyFeeManager): void {}
+// function getOrCreateAccount(address: Address): Account{
+//   let newAccount = Account.load(address.toHex());
+//   if(newAccount == null){
+//     newAccount = new Account(address.toHex());
+//   }
+//   return newAccount;
+// }
 
-export function handleNewTransferSelectorNFT(
-  event: NewTransferSelectorNFT
-): void {}
+// export function getOrCreateAccount(address: Address): Account {
+//   const accountAddress = address.toHex()
+//   let account = Account.load(accountAddress)
+//   if(account == null){
+//       account = new Account(accountAddress)
+//       account.bool = false;
+//       account.save()
+//   }
+//   return account
+// }
 
-export function handleOwnershipTransferred(event: OwnershipTransferred): void {}
 
-export function handleRoyaltyPayment(event: RoyaltyPayment): void {}
-
-export function handleTakerAsk(event: TakerAsk): void {}
-
-export function handleTakerBid(event: TakerBid): void {}
+// export function handleNewRSVP(event: NewRSVP): void {
+//   let newRSVP = RSVP.load(event.transaction.from.toHex());
+//   let account = getOrCreateAccount(event.params.attendeeAddress);
+//   let event = getOrCreateEvent(event.params.eventID);
+//   if (newRSVP == null) {
+//     newRSVP = new RSVP(event.transaction.from.toHex());
+//     newRSVP.attendee = account;
+//     newRSVP.event = event;
+//     newRSVP.save();
+//   }
+// }
