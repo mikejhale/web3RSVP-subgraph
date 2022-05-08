@@ -103,6 +103,43 @@ export class Event extends Entity {
   set paidOut(value: boolean) {
     this.set("paidOut", Value.fromBoolean(value));
   }
+
+  get rsvps(): Array<string> | null {
+    let value = this.get("rsvps");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set rsvps(value: Array<string> | null) {
+    if (!value) {
+      this.unset("rsvps");
+    } else {
+      this.set("rsvps", Value.fromStringArray(<Array<string>>value));
+    }
+  }
+
+  get confirmedAttendees(): Array<string> | null {
+    let value = this.get("confirmedAttendees");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set confirmedAttendees(value: Array<string> | null) {
+    if (!value) {
+      this.unset("confirmedAttendees");
+    } else {
+      this.set(
+        "confirmedAttendees",
+        Value.fromStringArray(<Array<string>>value)
+      );
+    }
+  }
 }
 
 export class Account extends Entity {
@@ -135,6 +172,43 @@ export class Account extends Entity {
 
   set id(value: string) {
     this.set("id", Value.fromString(value));
+  }
+
+  get rsvps(): Array<string> | null {
+    let value = this.get("rsvps");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set rsvps(value: Array<string> | null) {
+    if (!value) {
+      this.unset("rsvps");
+    } else {
+      this.set("rsvps", Value.fromStringArray(<Array<string>>value));
+    }
+  }
+
+  get confirmedAttendees(): Array<string> | null {
+    let value = this.get("confirmedAttendees");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set confirmedAttendees(value: Array<string> | null) {
+    if (!value) {
+      this.unset("confirmedAttendees");
+    } else {
+      this.set(
+        "confirmedAttendees",
+        Value.fromStringArray(<Array<string>>value)
+      );
+    }
   }
 }
 

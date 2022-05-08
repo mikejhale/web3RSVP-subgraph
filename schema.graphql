@@ -6,10 +6,14 @@ type Event @entity {
   maxCapacity: BigInt!
   deposit: BigInt!
   paidOut: Boolean! 
+  rsvps: [RSVP!] @derivedFrom(field: "event")
+  confirmedAttendees: [Confirmation!] @derivedFrom(field: "event")
 }
 
 type Account @entity {
   id: ID!
+  rsvps: [RSVP!] @derivedFrom(field: "attendee")
+  confirmedAttendees: [Confirmation!] @derivedFrom(field: "attendee")
 }
 
 type RSVP @entity {
