@@ -5,7 +5,7 @@ type Event @entity {
   eventTimestamp: BigInt!
   maxCapacity: BigInt!
   deposit: BigInt!
-  paidOut: Boolean! 
+  paidOut: Boolean!
   rsvps: [RSVP!] @derivedFrom(field: "event")
   confirmedAttendees: [Confirmation!] @derivedFrom(field: "event")
 }
