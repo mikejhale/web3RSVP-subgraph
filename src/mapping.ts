@@ -57,6 +57,7 @@ export function handleDepositsPaidOut(event: DepositsPaidOut): void {
   let thisEvent = Event.load(event.params.eventID.toHex());
   if (thisEvent) {
     thisEvent.paidOut = true;
+    thisEvent.save();
   } else {
     console.log("OH NO");
   }
