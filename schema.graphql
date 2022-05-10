@@ -1,6 +1,7 @@
 type Event @entity {
   id: ID!
   eventID: String!
+  eventName: String!
   eventOwner: String!
   eventTimestamp: BigInt!
   maxCapacity: BigInt!

@@ -11,6 +11,8 @@ export function handleNewEventCreated(event: NewEventCreated): void {
   let newEvent = Event.load(event.params.eventID.toHex());
   if (newEvent == null) {
     newEvent = new Event(event.params.eventID.toHex());
+    newEvent.eventID = event.params.eventID.toString();
+    newEvent.eventName = event.params.eventName;
     newEvent.eventOwner = event.params.creatorAddress.toString();
     newEvent.eventTimestamp = event.params.eventTimestamp;
     newEvent.maxCapacity = event.params.maxCapacity;

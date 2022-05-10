@@ -6,9 +6,10 @@ dataSources:
     name: Web3RSVP
     network: mainnet
     source:
-      address: ""
+    # temporary address
+      address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
       abi: Web3RSVP
-      startBlock: #######
+      # startBlock: #######
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -22,7 +23,7 @@ dataSources:
         - name: Web3RSVP
           file: ./abis/Web3RSVP.json
       eventHandlers:
-        - event: NewEventCreated(bytes32,address,uint256,uint256,uint256)
+        - event: NewEventCreated(bytes32,address,uint256,uint256,uint256,string)
           handler: handleNewEventCreated
         - event: NewRSVP(bytes32,address)
           handler: handleNewRSVP

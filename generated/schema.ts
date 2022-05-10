@@ -17,6 +17,7 @@ export class Event extends Entity {
     this.set("id", Value.fromString(id));
 
     this.set("eventID", Value.fromString(""));
+    this.set("eventName", Value.fromString(""));
     this.set("eventOwner", Value.fromString(""));
     this.set("eventTimestamp", Value.fromBigInt(BigInt.zero()));
     this.set("maxCapacity", Value.fromBigInt(BigInt.zero()));
@@ -57,6 +58,15 @@ export class Event extends Entity {
 
   set eventID(value: string) {
     this.set("eventID", Value.fromString(value));
+  }
+
+  get eventName(): string {
+    let value = this.get("eventName");
+    return value!.toString();
+  }
+
+  set eventName(value: string) {
+    this.set("eventName", Value.fromString(value));
   }
 
   get eventOwner(): string {

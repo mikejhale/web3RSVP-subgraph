@@ -82,6 +82,10 @@ export class NewEventCreated__Params {
   get deposit(): BigInt {
     return this._event.parameters[4].value.toBigInt();
   }
+
+  get eventName(): string {
+    return this._event.parameters[5].value.toString();
+  }
 }
 
 export class NewRSVP extends ethereum.Event {
@@ -106,57 +110,23 @@ export class NewRSVP__Params {
   }
 }
 
-export class Web3RSVP__createeventResult {
-  value0: Bytes;
-  value1: Address;
-  value2: BigInt;
-  value3: BigInt;
-  value4: BigInt;
-  value5: boolean;
-
-  constructor(
-    value0: Bytes,
-    value1: Address,
-    value2: BigInt,
-    value3: BigInt,
-    value4: BigInt,
-    value5: boolean
-  ) {
-    this.value0 = value0;
-    this.value1 = value1;
-    this.value2 = value2;
-    this.value3 = value3;
-    this.value4 = value4;
-    this.value5 = value5;
-  }
-
-  toMap(): TypedMap<string, ethereum.Value> {
-    let map = new TypedMap<string, ethereum.Value>();
-    map.set("value0", ethereum.Value.fromFixedBytes(this.value0));
-    map.set("value1", ethereum.Value.fromAddress(this.value1));
-    map.set("value2", ethereum.Value.fromUnsignedBigInt(this.value2));
-    map.set("value3", ethereum.Value.fromUnsignedBigInt(this.value3));
-    map.set("value4", ethereum.Value.fromUnsignedBigInt(this.value4));
-    map.set("value5", ethereum.Value.fromBoolean(this.value5));
-    return map;
-  }
-}
-
 export class Web3RSVP__idToEventResult {
   value0: Bytes;
-  value1: Address;
-  value2: BigInt;
+  value1: string;
+  value2: Address;
   value3: BigInt;
   value4: BigInt;
-  value5: boolean;
+  value5: BigInt;
+  value6: boolean;
 
   constructor(
     value0: Bytes,
-    value1: Address,
-    value2: BigInt,
+    value1: string,
+    value2: Address,
     value3: BigInt,
     value4: BigInt,
-    value5: boolean
+    value5: BigInt,
+    value6: boolean
   ) {
     this.value0 = value0;
     this.value1 = value1;
@@ -164,16 +134,18 @@ export class Web3RSVP__idToEventResult {
     this.value3 = value3;
     this.value4 = value4;
     this.value5 = value5;
+    this.value6 = value6;
   }
 
   toMap(): TypedMap<string, ethereum.Value> {
     let map = new TypedMap<string, ethereum.Value>();
     map.set("value0", ethereum.Value.fromFixedBytes(this.value0));
-    map.set("value1", ethereum.Value.fromAddress(this.value1));
-    map.set("value2", ethereum.Value.fromUnsignedBigInt(this.value2));
+    map.set("value1", ethereum.Value.fromString(this.value1));
+    map.set("value2", ethereum.Value.fromAddress(this.value2));
     map.set("value3", ethereum.Value.fromUnsignedBigInt(this.value3));
     map.set("value4", ethereum.Value.fromUnsignedBigInt(this.value4));
-    map.set("value5", ethereum.Value.fromBoolean(this.value5));
+    map.set("value5", ethereum.Value.fromUnsignedBigInt(this.value5));
+    map.set("value6", ethereum.Value.fromBoolean(this.value6));
     return map;
   }
 }
@@ -183,66 +155,28 @@ export class Web3RSVP extends ethereum.SmartContract {
     return new Web3RSVP("Web3RSVP", address);
   }
 
-  createevent(): Web3RSVP__createeventResult {
-    let result = super.call(
-      "createevent",
-      "createevent():(bytes32,address,uint256,uint256,uint256,bool)",
-      []
-    );
-
-    return new Web3RSVP__createeventResult(
-      result[0].toBytes(),
-      result[1].toAddress(),
-      result[2].toBigInt(),
-      result[3].toBigInt(),
-      result[4].toBigInt(),
-      result[5].toBoolean()
-    );
-  }
-
-  try_createevent(): ethereum.CallResult<Web3RSVP__createeventResult> {
-    let result = super.tryCall(
-      "createevent",
-      "createevent():(bytes32,address,uint256,uint256,uint256,bool)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(
-      new Web3RSVP__createeventResult(
-        value[0].toBytes(),
-        value[1].toAddress(),
-        value[2].toBigInt(),
-        value[3].toBigInt(),
-        value[4].toBigInt(),
-        value[5].toBoolean()
-      )
-    );
-  }
-
   idToEvent(param0: Bytes): Web3RSVP__idToEventResult {
     let result = super.call(
       "idToEvent",
-      "idToEvent(bytes32):(bytes32,address,uint256,uint256,uint256,bool)",
+      "idToEvent(bytes32):(bytes32,string,address,uint256,uint256,uint256,bool)",
       [ethereum.Value.fromFixedBytes(param0)]
     );
 
     return new Web3RSVP__idToEventResult(
       result[0].toBytes(),
-      result[1].toAddress(),
-      result[2].toBigInt(),
+      result[1].toString(),
+      result[2].toAddress(),
       result[3].toBigInt(),
       result[4].toBigInt(),
-      result[5].toBoolean()
+      result[5].toBigInt(),
+      result[6].toBoolean()
     );
   }
 
   try_idToEvent(param0: Bytes): ethereum.CallResult<Web3RSVP__idToEventResult> {
     let result = super.tryCall(
       "idToEvent",
-      "idToEvent(bytes32):(bytes32,address,uint256,uint256,uint256,bool)",
+      "idToEvent(bytes32):(bytes32,string,address,uint256,uint256,uint256,bool)",
       [ethereum.Value.fromFixedBytes(param0)]
     );
     if (result.reverted) {
@@ -252,11 +186,12 @@ export class Web3RSVP extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(
       new Web3RSVP__idToEventResult(
         value[0].toBytes(),
-        value[1].toAddress(),
-        value[2].toBigInt(),
+        value[1].toString(),
+        value[2].toAddress(),
         value[3].toBigInt(),
         value[4].toBigInt(),
-        value[5].toBoolean()
+        value[5].toBigInt(),
+        value[6].toBoolean()
       )
     );
   }
@@ -357,6 +292,10 @@ export class CreateNewEventCall__Inputs {
 
   get maxCapacity(): BigInt {
     return this._call.inputValues[2].value.toBigInt();
+  }
+
+  get eventName(): string {
+    return this._call.inputValues[3].value.toString();
   }
 }
 
