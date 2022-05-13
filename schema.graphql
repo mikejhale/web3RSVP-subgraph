@@ -1,8 +1,8 @@
 type Event @entity {
   id: ID!
-  eventID: String!
+  eventID: Bytes!
   eventName: String!
-  eventOwner: String!
+  eventOwner: Bytes!
   eventTimestamp: BigInt!
   maxCapacity: BigInt!
   deposit: BigInt!

@@ -16,9 +16,9 @@ export class Event extends Entity {
     super();
     this.set("id", Value.fromString(id));
 
-    this.set("eventID", Value.fromString(""));
+    this.set("eventID", Value.fromBytes(Bytes.empty()));
     this.set("eventName", Value.fromString(""));
-    this.set("eventOwner", Value.fromString(""));
+    this.set("eventOwner", Value.fromBytes(Bytes.empty()));
     this.set("eventTimestamp", Value.fromBigInt(BigInt.zero()));
     this.set("maxCapacity", Value.fromBigInt(BigInt.zero()));
     this.set("deposit", Value.fromBigInt(BigInt.zero()));
@@ -51,13 +51,13 @@ export class Event extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get eventID(): string {
+  get eventID(): Bytes {
     let value = this.get("eventID");
-    return value!.toString();
+    return value!.toBytes();
   }
 
-  set eventID(value: string) {
-    this.set("eventID", Value.fromString(value));
+  set eventID(value: Bytes) {
+    this.set("eventID", Value.fromBytes(value));
   }
 
   get eventName(): string {
@@ -69,13 +69,13 @@ export class Event extends Entity {
     this.set("eventName", Value.fromString(value));
   }
 
-  get eventOwner(): string {
+  get eventOwner(): Bytes {
     let value = this.get("eventOwner");
-    return value!.toString();
+    return value!.toBytes();
   }
 
-  set eventOwner(value: string) {
-    this.set("eventOwner", Value.fromString(value));
+  set eventOwner(value: Bytes) {
+    this.set("eventOwner", Value.fromBytes(value));
   }
 
   get eventTimestamp(): BigInt {

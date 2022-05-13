@@ -11,9 +11,9 @@ export function handleNewEventCreated(event: NewEventCreated): void {
   let newEvent = Event.load(event.params.eventID.toHex());
   if (newEvent == null) {
     newEvent = new Event(event.params.eventID.toHex());
-    newEvent.eventID = event.params.eventID.toString();
+    newEvent.eventID = event.params.eventID;
     newEvent.eventName = event.params.eventName;
-    newEvent.eventOwner = event.params.creatorAddress.toString();
+    newEvent.eventOwner = event.params.creatorAddress;
     newEvent.eventTimestamp = event.params.eventTimestamp;
     newEvent.maxCapacity = event.params.maxCapacity;
     newEvent.deposit = event.params.deposit;
@@ -32,11 +32,12 @@ function getOrCreateAccount(address: Address): Account {
 }
 
 export function handleNewRSVP(event: NewRSVP): void {
-  let newRSVP = RSVP.load(event.transaction.from.toHex());
+  let id = event.params.eventID.toHex() + event.params.attendeeAddress.toHex()
+  let newRSVP = RSVP.load(id);
   let account = getOrCreateAccount(event.params.attendeeAddress);
   let thisEvent = Event.load(event.params.eventID.toHex());
   if (newRSVP == null && thisEvent != null) {
-    newRSVP = new RSVP(event.transaction.from.toHex());
+    newRSVP = new RSVP(id);
     newRSVP.attendee = account.id;
     newRSVP.event = thisEvent.id;
     newRSVP.save();
@@ -44,11 +45,12 @@ export function handleNewRSVP(event: NewRSVP): void {
 }
 
 export function handleConfirmedAttendee(event: ConfirmedAttendee): void {
-  let newConfirmation = Confirmation.load(event.transaction.from.toHex());
+  let id = event.params.eventID.toHex() + event.params.attendeeAddress.toHex()
+  let newConfirmation = Confirmation.load(id);
   let account = getOrCreateAccount(event.params.attendeeAddress);
   let thisEvent = Event.load(event.params.eventID.toHex());
   if (newConfirmation == null && thisEvent != null) {
-    newConfirmation = new Confirmation(event.transaction.from.toHex());
+    newConfirmation = new Confirmation(id);
     newConfirmation.attendee = account.id;
     newConfirmation.event = thisEvent.id;
     newConfirmation.save();
@@ -60,7 +62,5 @@ export function handleDepositsPaidOut(event: DepositsPaidOut): void {
   if (thisEvent) {
     thisEvent.paidOut = true;
     thisEvent.save();
-  } else {
-    console.log("OH NO");
   }
 }
