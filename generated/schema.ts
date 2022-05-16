@@ -17,12 +17,13 @@ export class Event extends Entity {
     this.set("id", Value.fromString(id));
 
     this.set("eventID", Value.fromBytes(Bytes.empty()));
-    this.set("eventName", Value.fromString(""));
     this.set("eventOwner", Value.fromBytes(Bytes.empty()));
     this.set("eventTimestamp", Value.fromBigInt(BigInt.zero()));
     this.set("maxCapacity", Value.fromBigInt(BigInt.zero()));
     this.set("deposit", Value.fromBigInt(BigInt.zero()));
     this.set("paidOut", Value.fromBoolean(false));
+    this.set("totalRSVPs", Value.fromBigInt(BigInt.zero()));
+    this.set("totalConfirmedAttendees", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -60,13 +61,55 @@ export class Event extends Entity {
     this.set("eventID", Value.fromBytes(value));
   }
 
-  get eventName(): string {
-    let value = this.get("eventName");
-    return value!.toString();
+  get name(): string | null {
+    let value = this.get("name");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
   }
 
-  set eventName(value: string) {
-    this.set("eventName", Value.fromString(value));
+  set name(value: string | null) {
+    if (!value) {
+      this.unset("name");
+    } else {
+      this.set("name", Value.fromString(<string>value));
+    }
+  }
+
+  get description(): string | null {
+    let value = this.get("description");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set description(value: string | null) {
+    if (!value) {
+      this.unset("description");
+    } else {
+      this.set("description", Value.fromString(<string>value));
+    }
+  }
+
+  get link(): string | null {
+    let value = this.get("link");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set link(value: string | null) {
+    if (!value) {
+      this.unset("link");
+    } else {
+      this.set("link", Value.fromString(<string>value));
+    }
   }
 
   get eventOwner(): Bytes {
@@ -112,6 +155,24 @@ export class Event extends Entity {
 
   set paidOut(value: boolean) {
     this.set("paidOut", Value.fromBoolean(value));
+  }
+
+  get totalRSVPs(): BigInt {
+    let value = this.get("totalRSVPs");
+    return value!.toBigInt();
+  }
+
+  set totalRSVPs(value: BigInt) {
+    this.set("totalRSVPs", Value.fromBigInt(value));
+  }
+
+  get totalConfirmedAttendees(): BigInt {
+    let value = this.get("totalConfirmedAttendees");
+    return value!.toBigInt();
+  }
+
+  set totalConfirmedAttendees(value: BigInt) {
+    this.set("totalConfirmedAttendees", Value.fromBigInt(value));
   }
 
   get rsvps(): Array<string> | null {

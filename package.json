@@ -1,5 +1,5 @@
 {
-  "name": "looksrare-exchange2",
+  "name": "web3rsvp-subgraph",
   "license": "UNLICENSED",
   "scripts": {
     "codegen": "graph codegen",
@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.27.0",
-    "@graphprotocol/graph-ts": "0.24.1"
+    "@graphprotocol/graph-ts": "0.24.1",
+    "@protofire/subgraph-toolkit": "^0.1.2"
   }
 }

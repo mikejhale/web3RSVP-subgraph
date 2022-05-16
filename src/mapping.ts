@@ -6,18 +6,47 @@ import {
   DepositsPaidOut,
 } from "../generated/Web3RSVP/Web3RSVP";
 import { Account, RSVP, Confirmation, Event } from "../generated/schema";
+import { ipfs, json } from '@graphprotocol/graph-ts'
+import { integer } from '@protofire/subgraph-toolkit';
+
 
 export function handleNewEventCreated(event: NewEventCreated): void {
   let newEvent = Event.load(event.params.eventID.toHex());
   if (newEvent == null) {
     newEvent = new Event(event.params.eventID.toHex());
     newEvent.eventID = event.params.eventID;
-    newEvent.eventName = event.params.eventName;
     newEvent.eventOwner = event.params.creatorAddress;
     newEvent.eventTimestamp = event.params.eventTimestamp;
     newEvent.maxCapacity = event.params.maxCapacity;
     newEvent.deposit = event.params.deposit;
     newEvent.paidOut = false;
+    newEvent.totalRSVPs = integer.ZERO;
+    newEvent.totalConfirmedAttendees = integer.ZERO;
+
+    let metadata = ipfs.cat(event.params.eventDataCID + "/data.json");
+
+    if (metadata) {
+      const value = json.fromBytes(metadata).toObject()
+      if (value) {
+        const name = value.get('name')
+        const description = value.get('description')
+        const link = value.get('link')
+
+        if(name){
+          newEvent.name = name.toString()
+         }
+
+        if(description){
+          newEvent.description = description.toString()
+         }
+        
+        if(link){
+          newEvent.link = link.toString()
+         }
+      }
+      
+    }
+
     newEvent.save();
   }
 }
@@ -40,6 +69,8 @@ export function handleNewRSVP(event: NewRSVP): void {
     newRSVP = new RSVP(id);
     newRSVP.attendee = account.id;
     newRSVP.event = thisEvent.id;
+    thisEvent.totalRSVPs = integer.increment(thisEvent.totalRSVPs);
+    thisEvent.save();
     newRSVP.save();
   }
 }
@@ -53,6 +84,8 @@ export function handleConfirmedAttendee(event: ConfirmedAttendee): void {
     newConfirmation = new Confirmation(id);
     newConfirmation.attendee = account.id;
     newConfirmation.event = thisEvent.id;
+    thisEvent.totalConfirmedAttendees = integer.increment(thisEvent.totalConfirmedAttendees);
+    thisEvent.save();
     newConfirmation.save();
   }
 }

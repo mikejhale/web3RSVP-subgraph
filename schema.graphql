@@ -1,12 +1,16 @@
 type Event @entity {
   id: ID!
   eventID: Bytes!
-  eventName: String!
+  name: String
+  description: String
+  link: String
   eventOwner: Bytes!
   eventTimestamp: BigInt!
   maxCapacity: BigInt!
   deposit: BigInt!
   paidOut: Boolean!
+  totalRSVPs: BigInt!
+  totalConfirmedAttendees: BigInt!
   rsvps: [RSVP!] @derivedFrom(field: "event")
   confirmedAttendees: [Confirmation!] @derivedFrom(field: "event")
 }
