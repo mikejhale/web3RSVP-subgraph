@@ -4,6 +4,7 @@ type Event @entity {
   name: String
   description: String
   link: String
+  imageURL: String
   eventOwner: Bytes!
   eventTimestamp: BigInt!
   maxCapacity: BigInt!
@@ -17,8 +18,10 @@ type Event @entity {
 
 type Account @entity {
   id: ID!
+  totalRSVPs: BigInt!
+  totalAttendedEvents: BigInt!
   rsvps: [RSVP!] @derivedFrom(field: "attendee")
-  confirmedAttendees: [Confirmation!] @derivedFrom(field: "attendee")
+  attendedEvents: [Confirmation!] @derivedFrom(field: "attendee")
 }
 
 type RSVP @entity {

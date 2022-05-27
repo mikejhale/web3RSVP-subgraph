@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: Web3RSVP
-    network: goerli
+    network: mumbai
     source:
-      address: "0x5F74d4f6eF3f8862b3B48a02275EC5C93eC10A14"
+      address: "0x54e8A3aFf5F52F9eD452156E850654c452BCBefE"
       abi: Web3RSVP
-      startBlock: 6878159
+      startBlock: 26451003
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5

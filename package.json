@@ -1,13 +1,13 @@
 {
-  "name": "web3rsvp-subgraph",
+  "name": "web3-rsvp-mumbai",
   "license": "UNLICENSED",
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ sarahschwartz/looksrare-exchange2",
-    "create-local": "graph create --node http://localhost:8020/ sarahschwartz/looksrare-exchange2",
-    "remove-local": "graph remove --node http://localhost:8020/ sarahschwartz/looksrare-exchange2",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 sarahschwartz/looksrare-exchange2"
+    "deploy": "graph deploy --product hosted-service sarahschwartz/web3-rsvp-mumbai",
+    "create-local": "graph create --node http://localhost:8020/ sarahschwartz/web3-rsvp-mumbai",
+    "remove-local": "graph remove --node http://localhost:8020/ sarahschwartz/web3-rsvp-mumbai",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 sarahschwartz/web3-rsvp-mumbai"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.27.0",

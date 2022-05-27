@@ -112,6 +112,23 @@ export class Event extends Entity {
     }
   }
 
+  get imageURL(): string | null {
+    let value = this.get("imageURL");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set imageURL(value: string | null) {
+    if (!value) {
+      this.unset("imageURL");
+    } else {
+      this.set("imageURL", Value.fromString(<string>value));
+    }
+  }
+
   get eventOwner(): Bytes {
     let value = this.get("eventOwner");
     return value!.toBytes();
@@ -217,6 +234,9 @@ export class Account extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
+
+    this.set("totalRSVPs", Value.fromBigInt(BigInt.zero()));
+    this.set("totalAttendedEvents", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -245,6 +265,24 @@ export class Account extends Entity {
     this.set("id", Value.fromString(value));
   }
 
+  get totalRSVPs(): BigInt {
+    let value = this.get("totalRSVPs");
+    return value!.toBigInt();
+  }
+
+  set totalRSVPs(value: BigInt) {
+    this.set("totalRSVPs", Value.fromBigInt(value));
+  }
+
+  get totalAttendedEvents(): BigInt {
+    let value = this.get("totalAttendedEvents");
+    return value!.toBigInt();
+  }
+
+  set totalAttendedEvents(value: BigInt) {
+    this.set("totalAttendedEvents", Value.fromBigInt(value));
+  }
+
   get rsvps(): Array<string> | null {
     let value = this.get("rsvps");
     if (!value || value.kind == ValueKind.NULL) {
@@ -262,8 +300,8 @@ export class Account extends Entity {
     }
   }
 
-  get confirmedAttendees(): Array<string> | null {
-    let value = this.get("confirmedAttendees");
+  get attendedEvents(): Array<string> | null {
+    let value = this.get("attendedEvents");
     if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -271,14 +309,11 @@ export class Account extends Entity {
     }
   }
 
-  set confirmedAttendees(value: Array<string> | null) {
+  set attendedEvents(value: Array<string> | null) {
     if (!value) {
-      this.unset("confirmedAttendees");
+      this.unset("attendedEvents");
     } else {
-      this.set(
-        "confirmedAttendees",
-        Value.fromStringArray(<Array<string>>value)
-      );
+      this.set("attendedEvents", Value.fromStringArray(<Array<string>>value));
     }
   }
 }
