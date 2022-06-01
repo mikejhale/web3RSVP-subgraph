@@ -197,36 +197,6 @@ export class Web3RSVP extends ethereum.SmartContract {
   }
 }
 
-export class ConfirmAllAttendeesCall extends ethereum.Call {
-  get inputs(): ConfirmAllAttendeesCall__Inputs {
-    return new ConfirmAllAttendeesCall__Inputs(this);
-  }
-
-  get outputs(): ConfirmAllAttendeesCall__Outputs {
-    return new ConfirmAllAttendeesCall__Outputs(this);
-  }
-}
-
-export class ConfirmAllAttendeesCall__Inputs {
-  _call: ConfirmAllAttendeesCall;
-
-  constructor(call: ConfirmAllAttendeesCall) {
-    this._call = call;
-  }
-
-  get eventId(): Bytes {
-    return this._call.inputValues[0].value.toBytes();
-  }
-}
-
-export class ConfirmAllAttendeesCall__Outputs {
-  _call: ConfirmAllAttendeesCall;
-
-  constructor(call: ConfirmAllAttendeesCall) {
-    this._call = call;
-  }
-}
-
 export class ConfirmAttendeeCall extends ethereum.Call {
   get inputs(): ConfirmAttendeeCall__Inputs {
     return new ConfirmAttendeeCall__Inputs(this);
@@ -257,6 +227,40 @@ export class ConfirmAttendeeCall__Outputs {
   _call: ConfirmAttendeeCall;
 
   constructor(call: ConfirmAttendeeCall) {
+    this._call = call;
+  }
+}
+
+export class ConfirmGroupCall extends ethereum.Call {
+  get inputs(): ConfirmGroupCall__Inputs {
+    return new ConfirmGroupCall__Inputs(this);
+  }
+
+  get outputs(): ConfirmGroupCall__Outputs {
+    return new ConfirmGroupCall__Outputs(this);
+  }
+}
+
+export class ConfirmGroupCall__Inputs {
+  _call: ConfirmGroupCall;
+
+  constructor(call: ConfirmGroupCall) {
+    this._call = call;
+  }
+
+  get eventId(): Bytes {
+    return this._call.inputValues[0].value.toBytes();
+  }
+
+  get attendees(): Array<Address> {
+    return this._call.inputValues[1].value.toAddressArray();
+  }
+}
+
+export class ConfirmGroupCall__Outputs {
+  _call: ConfirmGroupCall;
+
+  constructor(call: ConfirmGroupCall) {
     this._call = call;
   }
 }
